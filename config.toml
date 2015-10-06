@@ -1,0 +1,19 @@
+log = "debug"
+sleeptime = 1
+
+[slack]
+text = "test"
+username = "bot"
+icon_emoji = ":sushi:"
+channel = "#test"
+link_names = true
+
+[webhook]
+url = "webhook_url"
+
+[ios]
+app_id = "id667861049"
+country = "jp"
+
+[android]
+package = "com.mercariapp.mercari"
