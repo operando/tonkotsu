@@ -5,7 +5,7 @@ Google Play Application & App Store Application Update Checker in Go
 ## Run
 
 ```bash
-go run googleplay_update_checker.go config.go -c config.toml
+go run tonkotsu.go config.go -c config.toml
 ```
 
 ## Config File
