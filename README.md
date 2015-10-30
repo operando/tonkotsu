@@ -13,11 +13,19 @@ go run tonkotsu.go config.go -c config.toml
 ```toml
 log = "debug"
 sleeptime = 1
+error_post = true
 
-[slack]
-text = "TONKOTSU TEST"
+[slack_update_post]
+text = "Update!!!!!"
 username = "TONKOTSU bot"
 icon_emoji = ":pig:"
+channel = "#test"
+link_names = true
+
+[slack_error_post]
+text = "Error!!!!!"
+username = "bot"
+icon_emoji = ":ghost:"
 channel = "#test"
 link_names = true
 
