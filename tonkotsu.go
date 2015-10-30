@@ -22,11 +22,11 @@ var new_update_date string
 var oldSoftwareVersion string
 var newSoftwareVersion string
 
-func checkUpdate(url string) bool {
+func checkUpdate(url string) (bool, error) {
 	doc, err := goquery.NewDocument(url)
 	if err != nil {
-		log.Fatal(err)
-		return false
+		log.Error(err)
+		return false, err
 	}
 	isUpdate := false
 	doc.Find("div[itemprop=\"datePublished\"]").Each(func(_ int, s *goquery.Selection) {
@@ -43,15 +43,15 @@ func checkUpdate(url string) bool {
 		}
 	})
 	log.Debug(isUpdate)
-	return isUpdate
+	return isUpdate, nil
 }
 
-func checkUpdateIos(url string) bool {
+func checkUpdateIos(url string) (bool, error) {
 	isUpdate := false
 	doc, err := goquery.NewDocument(url)
 	if err != nil {
-		log.Fatal(err)
-		return false
+		log.Error(err)
+		return false, err
 	}
 	doc.Find("ul.list span[itemprop=softwareVersion]").Each(func(_ int, s *goquery.Selection) {
 		log.Debug(s.Text())
@@ -67,7 +67,7 @@ func checkUpdateIos(url string) bool {
 		}
 	})
 	log.Debug(isUpdate)
-	return isUpdate
+	return isUpdate, nil
 }
 
 func createAppStoreURL(ios Ios) string {
@@ -123,7 +123,11 @@ func main() {
 
 	for {
 		if checkAndroid {
-			if checkUpdate(googlePlayURL) {
+			isUpdate, err := checkUpdate(googlePlayURL)
+			if err != nil && config.ErrorPost {
+				golack.Post(createErrorPost(err, config.Slack), config.Webhook)
+			}
+			if isUpdate {
 				golack.Post(payload, config.Webhook)
 				log.Info("Update!!!!!!!!!!!")
 				break
@@ -132,7 +136,11 @@ func main() {
 			}
 		}
 		if checkIos {
-			if checkUpdateIos(appStoreURL) {
+			isUpdate, err := checkUpdateIos(appStoreURL)
+			if err != nil && config.ErrorPost {
+				golack.Post(createErrorPost(err, config.Slack), config.Webhook)
+			}
+			if isUpdate {
 				golack.Post(payload, config.Webhook)
 				log.Info("Update!!!!!!!!!!!")
 				break
@@ -148,6 +156,18 @@ func main() {
 
 func init() {
 	log.SetLevel(log.InfoLevel)
+}
+
+func createErrorPost(e error, s golack.Slack) golack.Payload {
+	return golack.Payload{
+		golack.Slack{
+			Text:      e.Error(),
+			Username:  s.Username,
+			IconEmoji: s.IconEmoji,
+			Channel:   s.Channel,
+			LinkNames: s.LinkNames,
+		},
+	}
 }
 
 func setLogLevel(lv string) {

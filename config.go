@@ -13,6 +13,7 @@ type Config struct {
 	SleepTime int            `toml:"sleeptime"`
 	Android   Android        `toml:"android"`
 	Ios       Ios            `toml:"ios"`
+	ErrorPost bool           `toml:"error_post"`
 }
 
 type Android struct {

@@ -1,5 +1,6 @@
 log = "debug"
 sleeptime = 1
+error_post = true
 
 [slack]
 text = "test"
