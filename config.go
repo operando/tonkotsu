@@ -5,6 +5,11 @@ import (
 	"github.com/operando/golack"
 )
 
+const (
+	KEY_UPDATE_POST = "update_post"
+	KEY_ERROR_POST  = "error_post"
+)
+
 type Config struct {
 	Slacks    map[string]golack.Slack `toml:"slacks"`
 	Webhook   golack.Webhook          `toml:"webhook"`
