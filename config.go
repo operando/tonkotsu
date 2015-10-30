@@ -6,14 +6,14 @@ import (
 )
 
 type Config struct {
-	Slack     golack.Slack   `toml:"slack"`
-	Webhook   golack.Webhook `toml:"webhook"`
-	Payload   golack.Payload `toml:"playload"`
-	Log       string         `toml:"log"`
-	SleepTime int            `toml:"sleeptime"`
-	Android   Android        `toml:"android"`
-	Ios       Ios            `toml:"ios"`
-	ErrorPost bool           `toml:"error_post"`
+	Slacks    map[string]golack.Slack `toml:"slacks"`
+	Webhook   golack.Webhook          `toml:"webhook"`
+	Payload   golack.Payload          `toml:"playload"`
+	Log       string                  `toml:"log"`
+	SleepTime int                     `toml:"sleeptime"`
+	Android   Android                 `toml:"android"`
+	Ios       Ios                     `toml:"ios"`
+	ErrorPost bool                    `toml:"error_post"`
 }
 
 type Android struct {
