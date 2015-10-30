@@ -8,7 +8,6 @@ import (
 type Config struct {
 	Slacks    map[string]golack.Slack `toml:"slacks"`
 	Webhook   golack.Webhook          `toml:"webhook"`
-	Payload   golack.Payload          `toml:"playload"`
 	Log       string                  `toml:"log"`
 	SleepTime int                     `toml:"sleeptime"`
 	Android   Android                 `toml:"android"`
