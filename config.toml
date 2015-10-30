@@ -2,12 +2,21 @@ log = "debug"
 sleeptime = 1
 error_post = true
 
-[slack]
-text = "test"
-username = "bot"
-icon_emoji = ":sushi:"
-channel = "#test"
-link_names = true
+[slacks]
+
+  [slacks.update_post]
+  text = "test"
+  username = "bot"
+  icon_emoji = ":sushi:"
+  channel = "#test"
+  link_names = true
+
+  [slacks.error_post]
+  text = "test"
+  username = "bot"
+  icon_emoji = ":sushi:"
+  channel = "#test"
+  link_names = true
 
 [webhook]
 url = "webhook_url"
