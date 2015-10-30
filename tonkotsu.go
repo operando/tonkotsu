@@ -94,12 +94,17 @@ func main() {
 		return
 	}
 	setLogLevel(config.Log)
+	log.Debug(config)
 	sleep := time.Duration(config.SleepTime*60) * time.Second
 
 	var googlePlayURL string
 	var appStoreURL string
-	payload := golack.Payload{
-		config.Slack,
+	uPayload := golack.Payload{
+		config.Slacks[KEY_UPDATE_POST],
+	}
+
+	ePayload := golack.Payload{
+		config.Slacks[KEY_ERROR_POST],
 	}
 
 	checkIos := true
@@ -119,16 +124,17 @@ func main() {
 		log.Info("Check Google Play URL : " + googlePlayURL)
 	}
 
-	log.Info("Slack Post Message : " + config.Slack.Text)
+	log.Info("Slack Update Post Message : " + uPayload.Slack.Text)
+	log.Info("Slack Error Post Message : " + ePayload.Slack.Text)
 
 	for {
 		if checkAndroid {
 			isUpdate, err := checkUpdate(googlePlayURL)
 			if err != nil && config.ErrorPost {
-				golack.Post(createErrorPost(err, config.Slack), config.Webhook)
+				golack.Post(ePayload, config.Webhook)
 			}
 			if isUpdate {
-				golack.Post(payload, config.Webhook)
+				golack.Post(uPayload, config.Webhook)
 				log.Info("Update!!!!!!!!!!!")
 				break
 			} else {
@@ -138,10 +144,10 @@ func main() {
 		if checkIos {
 			isUpdate, err := checkUpdateIos(appStoreURL)
 			if err != nil && config.ErrorPost {
-				golack.Post(createErrorPost(err, config.Slack), config.Webhook)
+				golack.Post(ePayload, config.Webhook)
 			}
 			if isUpdate {
-				golack.Post(payload, config.Webhook)
+				golack.Post(uPayload, config.Webhook)
 				log.Info("Update!!!!!!!!!!!")
 				break
 			} else {
@@ -156,18 +162,6 @@ func main() {
 
 func init() {
 	log.SetLevel(log.InfoLevel)
-}
-
-func createErrorPost(e error, s golack.Slack) golack.Payload {
-	return golack.Payload{
-		golack.Slack{
-			Text:      e.Error(),
-			Username:  s.Username,
-			IconEmoji: s.IconEmoji,
-			Channel:   s.Channel,
-			LinkNames: s.LinkNames,
-		},
-	}
 }
 
 func setLogLevel(lv string) {
