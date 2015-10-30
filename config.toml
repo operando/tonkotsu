@@ -2,10 +2,17 @@ log = "debug"
 sleeptime = 1
 error_post = true
 
-[slack]
+[slack_update_post]
 text = "test"
 username = "bot"
 icon_emoji = ":sushi:"
+channel = "#test"
+link_names = true
+
+[slack_error_post]
+text = "error"
+username = "bot"
+icon_emoji = ":ghost:"
 channel = "#test"
 link_names = true
 
