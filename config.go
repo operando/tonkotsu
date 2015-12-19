@@ -8,6 +8,7 @@ import (
 type Config struct {
 	SlackUpdatePost golack.Slack   `toml:"slack_update_post"`
 	SlackErrorPost  golack.Slack   `toml:"slack_error_post"`
+	SlackStartPost  golack.Slack   `toml:"slack_start_post"`
 	Webhook         golack.Webhook `toml:"webhook"`
 	Log             string         `toml:"log"`
 	SleepTime       int            `toml:"sleeptime"`

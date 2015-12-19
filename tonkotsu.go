@@ -106,6 +106,13 @@ func main() {
 		config.SlackErrorPost,
 	}
 
+	if config.SlackStartPost.Text != "" {
+		sPayload := golack.Payload{
+			config.SlackStartPost,
+		}
+		golack.Post(sPayload, config.Webhook)
+	}
+
 	checkIos := true
 	if config.Ios.AppId == "" {
 		checkIos = false
