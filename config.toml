@@ -4,20 +4,14 @@ error_post = true
 
 [slack_update_post]
 text = "test"
-username = "bot"
-icon_emoji = ":sushi:"
-channel = "#test"
-link_names = true
 
 [slack_error_post]
 text = "error"
-username = "bot"
-icon_emoji = ":ghost:"
-channel = "#test"
-link_names = true
 
 [slack_start_post]
 text = "Running tonkotsu..."
+
+[default_slack_config]
 username = "bot"
 icon_emoji = ":ghost:"
 channel = "#test"
