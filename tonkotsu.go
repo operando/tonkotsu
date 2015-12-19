@@ -16,8 +16,8 @@ const (
 	APP_STORE   = "https://itunes.apple.com/{{country}}/app/{{appId}}"
 )
 
-var old_update_date string
-var new_update_date string
+var oldUpdateDate string
+var newUpdateDate string
 
 var oldSoftwareVersion string
 var newSoftwareVersion string
@@ -31,13 +31,13 @@ func checkUpdate(url string) (bool, error) {
 	isUpdate := false
 	doc.Find("div[itemprop=\"datePublished\"]").Each(func(_ int, s *goquery.Selection) {
 		log.Debug(s.Text())
-		if old_update_date == "" {
-			old_update_date = s.Text()
-			log.Info("Old update date : " + old_update_date)
+		if oldUpdateDate == "" {
+			oldUpdateDate = s.Text()
+			log.Info("Old update date : " + oldUpdateDate)
 		} else {
-			new_update_date = s.Text()
-			if old_update_date != new_update_date {
-				log.Info("New update date : " + new_update_date)
+			newUpdateDate = s.Text()
+			if oldUpdateDate != newUpdateDate {
+				log.Info("New update date : " + newUpdateDate)
 				isUpdate = true
 			}
 		}
@@ -72,7 +72,7 @@ func checkUpdateIos(url string) (bool, error) {
 
 func createAppStoreURL(ios Ios) string {
 	replaceCountryURL := strings.Replace(APP_STORE, "{{country}}", ios.Country, 1)
-	appStoreURL := strings.Replace(replaceCountryURL, "{{appId}}", ios.AppId, 1)
+	appStoreURL := strings.Replace(replaceCountryURL, "{{appId}}", ios.AppID, 1)
 	log.Debug(appStoreURL)
 	return appStoreURL
 }
@@ -114,7 +114,7 @@ func main() {
 	}
 
 	checkIos := true
-	if config.Ios.AppId == "" {
+	if config.Ios.AppID == "" {
 		checkIos = false
 		log.Debug("AppId is empty.")
 	} else {

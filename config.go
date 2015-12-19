@@ -23,7 +23,7 @@ type Android struct {
 
 type Ios struct {
 	Country string `toml:"country"`
-	AppId   string `toml:"app_id"`
+	AppID   string `toml:"app_id"`
 }
 
 func LoadConfig(configPath string, config *Config) (*Config, error) {
