@@ -29,6 +29,13 @@ icon_emoji = ":ghost:"
 channel = "#test"
 link_names = true
 
+[slack_start_post]
+text = "Running tonkotsu..."
+username = "bot"
+icon_emoji = ":ghost:"
+channel = "#test"
+link_names = true
+
 [webhook]
 url = "webhook_url" # your Incoming WebHooks URL for Slack
 
