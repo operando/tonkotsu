@@ -12,6 +12,10 @@ import (
 )
 
 const (
+	VERSION = "1.1.1"
+)
+
+const (
 	GOOGLE_PLAY = "https://play.google.com/store/apps/details?id="
 	APP_STORE   = "https://itunes.apple.com/{{country}}/app/{{appId}}"
 )
@@ -85,7 +89,13 @@ func createGooglePlayURL(android Android) string {
 
 func main() {
 	var configPath = flag.String("c", "", "configuration file path")
+	var version = flag.Bool("v",false,"version")
 	flag.Parse()
+
+	if *version {
+		fmt.Printf(`tonkotus version %s`,VERSION);
+		return
+	}
 
 	var config Config
 	_, err := LoadConfig(*configPath, &config)
