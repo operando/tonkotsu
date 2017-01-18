@@ -14,6 +14,7 @@ type Config struct {
 	SleepTime       int            `toml:"sleeptime"`
 	Android         Android        `toml:"android"`
 	Ios             Ios            `toml:"ios"`
+	Kindle          Kindle         `toml:"kindle"`
 	ErrorPost       bool           `toml:"error_post"`
 }
 
@@ -24,6 +25,10 @@ type Android struct {
 type Ios struct {
 	Country string `toml:"country"`
 	AppID   string `toml:"app_id"`
+}
+
+type Kindle struct {
+	Asin   string `toml:"asin"`
 }
 
 func LoadConfig(configPath string, config *Config) (*Config, error) {

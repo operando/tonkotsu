@@ -1,6 +1,6 @@
 # TONKOTSU
 
-Google Play Application & App Store Application Update Checker in Go
+Google Play / Kindle Store Application & App Store Application Update Checker in Go
 
 ## Run
 
@@ -46,6 +46,8 @@ country = "jp"
 [android]
 package = "com.mercariapp.mercari" # your Android application package name
 
+[kindle]
+asin = "" # your Amazon Standard Identification Number
 ```
 
 ## License

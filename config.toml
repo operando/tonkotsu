@@ -32,3 +32,6 @@ country = "jp"
 
 [android]
 package = "com.mercariapp.mercari"
+
+[kindle]
+asin = ""
