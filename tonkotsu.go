@@ -82,15 +82,15 @@ func checkUpdateKindle(url string) (bool, error) {
 		log.Error(err)
 		return false, err
 	}
-	doc.Find("#mas-technical-details div div:nth-child(2)").Each(func(_ int, s *goquery.Selection) {
-		log.Debug(s.Text())
+	doc.Find("#productDetailsTable li:nth-child(3)").Each(func(_ int, s *goquery.Selection) {
+		log.Debug(strings.TrimSpace(s.Text()))
 		if oldSoftwareVersion == "" {
-			oldSoftwareVersion = s.Text()
-			log.Info("Old Software " + oldSoftwareVersion)
+			oldSoftwareVersion = strings.TrimSpace(s.Text())
+			log.Info(oldSoftwareVersion)
 		} else {
-			newSoftwareVersion = s.Text()
+			newSoftwareVersion = strings.TrimSpace(s.Text())
 			if oldSoftwareVersion != newSoftwareVersion {
-				log.Info("New Software " + newSoftwareVersion)
+				log.Info(newSoftwareVersion)
 				isUpdate = true
 			}
 		}
