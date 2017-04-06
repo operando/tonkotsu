@@ -18,6 +18,7 @@ const (
 const (
 	GOOGLE_PLAY = "https://play.google.com/store/apps/details?id="
 	APP_STORE   = "https://itunes.apple.com/{{country}}/app/{{appId}}"
+	KINDLE_STORE = "https://www.amazon.co.jp/gp/product/"
 )
 
 var oldUpdateDate string
@@ -74,6 +75,30 @@ func checkUpdateIos(url string) (bool, error) {
 	return isUpdate, nil
 }
 
+func checkUpdateKindle(url string) (bool, error) {
+	isUpdate := false
+	doc, err := goquery.NewDocument(url)
+	if err != nil {
+		log.Error(err)
+		return false, err
+	}
+	doc.Find("#productDetailsTable li:nth-child(3)").Each(func(_ int, s *goquery.Selection) {
+		log.Debug(strings.TrimSpace(s.Text()))
+		if oldSoftwareVersion == "" {
+			oldSoftwareVersion = strings.TrimSpace(s.Text())
+			log.Info(oldSoftwareVersion)
+		} else {
+			newSoftwareVersion = strings.TrimSpace(s.Text())
+			if oldSoftwareVersion != newSoftwareVersion {
+				log.Info(newSoftwareVersion)
+				isUpdate = true
+			}
+		}
+	})
+	log.Debug(isUpdate)
+	return isUpdate, nil
+}
+
 func createAppStoreURL(ios Ios) string {
 	replaceCountryURL := strings.Replace(APP_STORE, "{{country}}", ios.Country, 1)
 	appStoreURL := strings.Replace(replaceCountryURL, "{{appId}}", ios.AppID, 1)
@@ -85,6 +110,12 @@ func createGooglePlayURL(android Android) string {
 	googlePlayURL := GOOGLE_PLAY + android.Package
 	log.Debug(googlePlayURL)
 	return googlePlayURL
+}
+
+func createKindleStoreURL(kindle Kindle) string {
+	kindleStoreURL := KINDLE_STORE + kindle.Asin
+	log.Debug(kindleStoreURL)
+	return kindleStoreURL
 }
 
 func main() {
@@ -108,6 +139,7 @@ func main() {
 
 	var googlePlayURL string
 	var appStoreURL string
+	var kindleStoreURL string
 	uPayload := golack.Payload{
 		config.SlackUpdatePost,
 	}
@@ -139,7 +171,14 @@ func main() {
 		googlePlayURL = createGooglePlayURL(config.Android)
 		log.Info("Check Google Play URL : " + googlePlayURL)
 	}
-
+	checkKindle := true
+	if config.Kindle.Asin == "" {
+		checkKindle = false
+		log.Debug("Asin is empty.")
+	} else {
+		kindleStoreURL = createKindleStoreURL(config.Kindle)
+		log.Info("Check Kindle Store URL : " + kindleStoreURL)
+	}
 	log.Info("Slack Post Message : " + config.SlackUpdatePost.Text)
 	log.Info("Slack Errro Message : " + config.SlackErrorPost.Text)
 
@@ -161,6 +200,19 @@ func main() {
 		}
 		if checkIos {
 			isUpdate, err := checkUpdateIos(appStoreURL)
+			if err != nil && config.ErrorPost {
+				golack.Post(ePayload, config.Webhook)
+			}
+			if isUpdate {
+				golack.Post(uPayload, config.Webhook)
+				log.Info("Update!!!!!!!!!!!")
+				break
+			} else {
+				log.Info("No Update")
+			}
+		}
+		if checkKindle {
+			isUpdate, err := checkUpdateKindle(kindleStoreURL)
 			if err != nil && config.ErrorPost {
 				golack.Post(ePayload, config.Webhook)
 			}
